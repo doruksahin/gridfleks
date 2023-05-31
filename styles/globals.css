@@ -1,0 +1,53 @@
+@tailwind base;
+
+@layer base {
+  html {
+    @apply text-black;
+    @apply scroll-smooth;
+  }
+
+  @font-face {
+    font-family: 'FreightSansPro';
+    font-weight: 400;
+    src: url(/fonts/FreightSansProBlack-Regular.eot) format('woff');
+  }
+  @font-face {
+    font-family: 'Playfair Display';
+    src: url('../fonts/PlayfairDisplay.ttf');
+  }
+  @font-face {
+    font-family: 'Delicious Handrawn';
+    src: url('../fonts/DeliciousHandrawn-Regular.ttf');
+  }
+}
+
+.menu-item {
+  color: white;
+  font-size: 8vw;
+  padding: 1vw 4vw;
+  position: relative;
+}
+
+.menu-item:before {
+  background: linear-gradient(to left, transparent, rgb(224, 255, 91));
+  content: '';
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  width: 0%;
+  position: absolute;
+  z-index: -10;
+}
+
+.menu-item-selected:before {
+  transition: width 500ms ease;
+  width: 100%;
+}
+
+.menu-item:hover:before {
+  transition: width 500ms ease;
+  width: 100%;
+}
+
+@tailwind components;
+@tailwind utilities;
