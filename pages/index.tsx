@@ -15,7 +15,7 @@ type Point = {
 };
 
 export default function Grid() {
-  const LENGTH = 5;
+  const LENGTH = 10;
   const [isDragging, setIsDragging] = useState<boolean | null>(null);
   const previousIsDragging = usePrevious(isDragging);
   const isDraggingStopped = previousIsDragging == true && isDragging == false;
@@ -153,7 +153,7 @@ export default function Grid() {
               }}
               onMouseEnter={() => handleMouseEnter(index)}
               key={index}
-              className=" flex items-center justify-center border border-black relative"
+              className=" flex items-center justify-center border border-black relative bg-gray-200"
               style={{
                 gridRow: `span ${squareProperty.xLength}`,
                 gridColumn: `span ${squareProperty.yLength}`,
