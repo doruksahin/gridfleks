@@ -49,7 +49,9 @@ export default function Grid() {
 
   useEffect(() => {
     if (dragStartIndex == null || currentIndex == null) return;
-    setCompletedSquarePreview(completeSquare(currentIndex));
+    const square = completeSquare(currentIndex);
+    console.log(square);
+    setCompletedSquarePreview(square);
   }, [dragStartIndex, currentIndex]);
 
   useEffect(() => {
@@ -77,20 +79,19 @@ export default function Grid() {
     for (let i = lowY; i <= highY; i++) {
       ys.push(i);
     }
-    console.log('x', startX, endX);
-    console.log('y', startY, endY);
-    console.log('xs', xs);
-    console.log('ys', ys);
+
     const candidateSquareIndices = [];
     for (const x of xs) {
       for (const y of ys) {
         candidateSquareIndices.push(x * LENGTH + y);
       }
     }
-    console.log('candidates', candidateSquareIndices);
     if (
       candidateSquareIndices.some(gridIndex =>
-        squareIndexesList.flat().includes(gridIndex),
+        squareIndexesList
+          .map(squareIndexes => squareIndexes.indices)
+          .flat()
+          .includes(gridIndex),
       )
     )
       candidateSquareIndices.length = 0;
@@ -100,8 +101,6 @@ export default function Grid() {
       indices: candidateSquareIndices,
     };
   }
-
-  console.log(squareIndexesList);
 
   function mobileHandleTouchEnter(event) {
     const touch = event.touches[0];
