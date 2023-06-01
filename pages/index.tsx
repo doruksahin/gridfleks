@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import usePrevious from 'hooks/usePrevious';
+import usePrevious from '@/hooks/usePrevious';
 
 type Square = {
   top: number;
@@ -50,7 +50,6 @@ export default function Grid() {
   useEffect(() => {
     if (dragStartIndex == null || currentIndex == null) return;
     const square = completeSquare(currentIndex);
-    console.log(square);
     setCompletedSquarePreview(square);
   }, [dragStartIndex, currentIndex]);
 
