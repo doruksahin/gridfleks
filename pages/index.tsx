@@ -113,6 +113,12 @@ export default function Grid() {
     }
   }
 
+  function undoMerge(index) {
+    setSquareIndexesList(
+      squareIndexesList.filter(square => square.indices[0] !== index),
+    );
+  }
+
   return (
     <div
       className="grid h-screen"
@@ -147,12 +153,19 @@ export default function Grid() {
               }}
               onMouseEnter={() => handleMouseEnter(index)}
               key={index}
-              className=" flex items-center justify-center border border-black "
+              className=" flex items-center justify-center border border-black relative"
               style={{
                 gridRow: `span ${squareProperty.xLength}`,
                 gridColumn: `span ${squareProperty.yLength}`,
               }}>
-              {index}
+              <div>
+                <div
+                  className="absolute top-0 left-0 px-8 py-4 bg-blue-400"
+                  onClick={() => undoMerge(index)}>
+                  X
+                </div>
+                {index}
+              </div>
             </div>
           );
         } else if (shouldSkip) {
