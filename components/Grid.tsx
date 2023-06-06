@@ -138,7 +138,6 @@ export default function Grid({
     }
   }
 
-  console.log(squareIndexesList);
   function undoMerge(index) {
     setSquareIndexesList(
       squareIndexesList.filter(square => square.indices[0] !== index),
@@ -182,21 +181,44 @@ export default function Grid({
       newDraggingMergedItem.indices = draggingMergedItem.indices.map(
         index => index + diff,
       );
+      console.log(newDraggingMergedItem.indices);
 
-      if (
-        !newDraggingMergedItem.indices.some(gridIndex =>
-          squareIndexesList
-            .map(squareIndexes => squareIndexes.indices)
-            .flat()
-            .includes(gridIndex),
-        )
-      ) {
+      if (isNewIndicesValid(newDraggingMergedItem)) {
         setSquareIndexesList(prev => [...prev, newDraggingMergedItem]);
       } else {
         setSquareIndexesList(prev => [...prev, draggingMergedItem]);
       }
       setIsDraggingMergedOne(false);
     }
+  }
+
+  function isNewIndicesValid(newDraggingMergedItem) {
+    console.log(Math.floor(newDraggingMergedItem.indices[0] / LENGTH));
+    console.log(newDraggingMergedItem.yLength);
+
+    console.log(LENGTH);
+
+    const isOutOfBoundsX =
+      Math.floor(newDraggingMergedItem.indices[0] / LENGTH) !=
+      Math.floor(
+        (newDraggingMergedItem.indices[0] + newDraggingMergedItem.xLength) /
+          LENGTH,
+      );
+    const isOutOfBoundsY =
+      Math.floor(newDraggingMergedItem.indices[0] / LENGTH) +
+        newDraggingMergedItem.yLength >
+        LENGTH || Math.floor(newDraggingMergedItem.indices[0] / LENGTH) < 0;
+
+    return (
+      !newDraggingMergedItem.indices.some(gridIndex =>
+        squareIndexesList
+          .map(squareIndexes => squareIndexes.indices)
+          .flat()
+          .includes(gridIndex),
+      ) &&
+      !isOutOfBoundsX &&
+      !isOutOfBoundsY
+    );
   }
 
   function gridDraggingStarted(event) {}
