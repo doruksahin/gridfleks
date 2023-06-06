@@ -21,7 +21,7 @@ export default function Grid({
   initialData = [],
   setData,
 }) {
-  const LENGTH = 30;
+  const LENGTH = 10;
   const [isDragging, setIsDragging] = useState<boolean | null>(null);
   const previousIsDragging = usePrevious(isDragging);
   const isDraggingStopped = previousIsDragging == true && isDragging == false;
@@ -81,16 +81,16 @@ export default function Grid({
   }, [isDraggingStopped, completedSquarePreview]);
 
   function completeSquare(lastIndex: number) {
-    const startX = Math.floor(dragStartIndex / LENGTH);
-    const endX = Math.floor(lastIndex / LENGTH);
+    const startX = dragStartIndex % LENGTH;
+    const endX = lastIndex % LENGTH;
     const [lowX, highX] = startX > endX ? [endX, startX] : [startX, endX];
     const xs = [];
     for (let i = lowX; i <= highX; i++) {
       xs.push(i);
     }
 
-    const startY = dragStartIndex % LENGTH;
-    const endY = lastIndex % LENGTH;
+    const startY = Math.floor(dragStartIndex / LENGTH);
+    const endY = Math.floor(lastIndex / LENGTH);
     const [lowY, highY] = startY > endY ? [endY, startY] : [startY, endY];
     const ys = [];
     for (let i = lowY; i <= highY; i++) {
@@ -100,7 +100,7 @@ export default function Grid({
     const candidateSquareIndices = [];
     for (const x of xs) {
       for (const y of ys) {
-        candidateSquareIndices.push(x * LENGTH + y);
+        candidateSquareIndices.push(x + y * LENGTH);
       }
     }
     if (
@@ -112,6 +112,11 @@ export default function Grid({
       )
     )
       candidateSquareIndices.length = 0;
+    console.log({
+      xLength: xs.length,
+      yLength: ys.length,
+      indices: candidateSquareIndices,
+    });
     return {
       xLength: xs.length,
       yLength: ys.length,
@@ -193,17 +198,22 @@ export default function Grid({
   }
 
   function isNewIndicesValid(newDraggingMergedItem) {
-    console.log(Math.floor(newDraggingMergedItem.indices[0] / LENGTH));
-    console.log(newDraggingMergedItem.yLength);
+    console.log(newDraggingMergedItem);
+    console.log(newDraggingMergedItem.indices[0] / LENGTH);
+    console.log(
+      (newDraggingMergedItem.indices[0] + newDraggingMergedItem.xLength) /
+        LENGTH,
+    );
 
     console.log(LENGTH);
 
+    const newY =
+      (newDraggingMergedItem.indices[0] + newDraggingMergedItem.xLength) /
+      LENGTH;
     const isOutOfBoundsX =
       Math.floor(newDraggingMergedItem.indices[0] / LENGTH) !=
-      Math.floor(
-        (newDraggingMergedItem.indices[0] + newDraggingMergedItem.xLength) /
-          LENGTH,
-      );
+        Math.floor(newY) && Math.floor(newY) != newY;
+
     const isOutOfBoundsY =
       Math.floor(newDraggingMergedItem.indices[0] / LENGTH) +
         newDraggingMergedItem.yLength >
@@ -224,7 +234,7 @@ export default function Grid({
   function gridDraggingStarted(event) {}
 
   return (
-    <div className="w-full h-full">
+    <div className="w-1/2 h-full">
       <Dragged draggingRect={draggingRect} />
       <div
         className="grid h-full"
@@ -263,8 +273,8 @@ export default function Grid({
                   isEditing ? 'border border-black' : ''
                 } relative flex items-center justify-center `}
                 style={{
-                  gridRow: `span ${squareProperty.xLength}`,
-                  gridColumn: `span ${squareProperty.yLength}`,
+                  gridRow: `span ${squareProperty.yLength}`,
+                  gridColumn: `span ${squareProperty.xLength}`,
                 }}>
                 <div className="flex h-full w-full flex-col">
                   {children ? (
