@@ -6,9 +6,9 @@ export default function useDraggingPosition() {
   const [draggingRect, setDraggingRect] = useState({});
 
   function onDraggingStart(event) {
-    console.log('started');
     const rect = event.target.getBoundingClientRect();
     const {x, y, width, height, top, right, bottom, left} = rect;
+
     setDraggingRect({
       x,
       y,
@@ -16,8 +16,9 @@ export default function useDraggingPosition() {
       height,
       lastMouseX: event.clientX,
       lastMouseY: event.clientY,
+      mouseLeft: x - event.clientX,
+      mouseTop: y - event.clientY,
     });
-    console.log(`Clicked coordinates: (${event.clientX}, ${event.clientY})`);
   }
 
   useEffect(() => {
@@ -33,10 +34,7 @@ export default function useDraggingPosition() {
   }, [mousePosition]);
 
   function onDraggingStop(event) {
-    console.log('stopped');
     setDraggingRect({});
-    console.log(event.target.getBoundingClientRect());
-    console.log(`Clicked coordinates: (${event.clientX}, ${event.clientY})`);
   }
 
   return {draggingRect, onDraggingStart, onDraggingStop};

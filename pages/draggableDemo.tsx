@@ -15,18 +15,7 @@ function Grid() {
 
   return (
     <div className="relative">
-      {draggingRect.x != null ? (
-        <div
-          className="absolute bg-red-300 pointer-events-none"
-          style={{
-            top: draggingRect.y,
-            left: draggingRect.x,
-            width: draggingRect.width,
-            height: draggingRect.height,
-          }}></div>
-      ) : (
-        <></>
-      )}
+      <Dragged draggingRect={draggingRect} />
       <div
         onMouseDown={event => onDraggingStart(event)}
         onMouseUp={event => onDraggingStop(event)}
@@ -41,5 +30,20 @@ function Grid() {
         ))}
       </div>
     </div>
+  );
+}
+
+function Dragged({draggingRect}) {
+  if (draggingRect.x == null) return;
+  return (
+    <div
+      className="absolute bg-red-300 pointer-events-none"
+      style={{
+        top: draggingRect.y,
+        left: draggingRect.x,
+        width: draggingRect.width,
+        height: draggingRect.height,
+      }}
+    />
   );
 }
