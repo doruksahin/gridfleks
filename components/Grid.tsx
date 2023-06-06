@@ -138,6 +138,7 @@ export default function Grid({
     }
   }
 
+  console.log(squareIndexesList);
   function undoMerge(index) {
     setSquareIndexesList(
       squareIndexesList.filter(square => square.indices[0] !== index),
@@ -145,6 +146,7 @@ export default function Grid({
   }
 
   function onDraggingMergedStarted(index, event) {
+    if (event.target.innerHTML == 'X') return;
     setIsDraggingMergedOne(true);
     const droppedItem = squareIndexesList.find(
       square => square.indices[0] === index,
@@ -173,23 +175,25 @@ export default function Grid({
         -draggingRect.mouseTop / event.target.clientHeight,
       );
       const offset = xFloorDiff + LENGTH * yFloorDiff;
-      console.log({xFloorDiff, yFloorDiff, gridCellIndex});
+      //console.log({xFloorDiff, yFloorDiff, gridCellIndex});
 
       const diff = gridCellIndex - draggingMergedItem.indices[0] - offset;
-      draggingMergedItem.indices = draggingMergedItem.indices.map(
+      const newDraggingMergedItem = {...draggingMergedItem};
+      newDraggingMergedItem.indices = draggingMergedItem.indices.map(
         index => index + diff,
       );
 
       if (
-        !draggingMergedItem.indices.some(gridIndex =>
+        !newDraggingMergedItem.indices.some(gridIndex =>
           squareIndexesList
             .map(squareIndexes => squareIndexes.indices)
             .flat()
             .includes(gridIndex),
         )
       ) {
-        setSquareIndexesList(prev => [...prev, draggingMergedItem]);
+        setSquareIndexesList(prev => [...prev, newDraggingMergedItem]);
       } else {
+        setSquareIndexesList(prev => [...prev, draggingMergedItem]);
       }
       setIsDraggingMergedOne(false);
     }
@@ -227,7 +231,6 @@ export default function Grid({
               <div
                 data-index={index}
                 onMouseDown={event => onDraggingMergedStarted(index, event)}
-                onMouseUp={event => console.log('stopppedd')}
                 onTouchStart={event => onDraggingMergedStarted(index, event)}
                 onTouchMove={event => {
                   mobileHandleTouchEnter(event);
@@ -245,7 +248,9 @@ export default function Grid({
                   {children ? (
                     cloneElement(children, {
                       index: index,
-                      onUndoMerge: () => undoMerge(index),
+                      onUndoMerge: event => {
+                        undoMerge(index);
+                      },
                     })
                   ) : (
                     <div
