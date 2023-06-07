@@ -234,7 +234,7 @@ export default function Grid({
   function gridDraggingStarted(event) {}
 
   return (
-    <div className="w-1/2 h-full">
+    <div className="w-full h-full">
       <Dragged draggingRect={draggingRect} />
       <div
         className="grid h-full"
@@ -271,7 +271,7 @@ export default function Grid({
                 key={index}
                 className={`${
                   isEditing ? 'border border-black' : ''
-                } relative flex items-center justify-center `}
+                } relative flex items-center justify-center bg-slate-200`}
                 style={{
                   gridRow: `span ${squareProperty.yLength}`,
                   gridColumn: `span ${squareProperty.xLength}`,
@@ -285,10 +285,15 @@ export default function Grid({
                       },
                     })
                   ) : (
-                    <div
-                      className="w-fit bg-blue-400 px-4 py-2"
-                      onClick={() => undoMerge(index)}>
-                      X
+                    <div className="w-full h-full relative">
+                      <div
+                        className="w-fit bg-blue-400 px-4 py-2 cursor-pointer"
+                        onClick={() => undoMerge(index)}>
+                        X
+                      </div>
+                      <div className="absolute top-1/2 left-1/2  text-3xl">
+                        {index}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -308,7 +313,7 @@ export default function Grid({
                 onMouseEnter={() => handleMouseEnter(index)}
                 key={index}
                 className={`${
-                  isEditing ? 'border border-black' : ''
+                  isEditing ? 'cursor-grab border border-black' : ''
                 } flex select-none items-center justify-center ${
                   completedSquarePreview.indices.includes(index)
                     ? 'bg-red-200'

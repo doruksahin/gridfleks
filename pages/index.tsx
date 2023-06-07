@@ -20,10 +20,10 @@ export default function Index() {
   const [data, setData] = useState([]);
   const [isEditing, setIsEditing] = useState(true);
   return (
-    <div className=" flex h-screen w-screen flex-col border-4 border-black  bg-opacity-50 p-2">
-      <Grid isEditing={isEditing} setData={setData} initialData={data}>
-        <GridCell isEditing={isEditing} data={data} setData={setData} />
-      </Grid>
+    <div className="flex h-screen items-center justify-center">
+      <div className="border-4 border-black  bg-opacity-50 w-[90%] h-[90%]">
+        <Grid isEditing={isEditing} setData={setData} initialData={data}></Grid>
+      </div>
     </div>
   );
 }
