@@ -1,4 +1,4 @@
-import useMousePosition from '@/hooks/useMousePosition';
+import useMousePosition from './useMousePosition';
 import {useEffect, useState} from 'react';
 
 export default function useDraggingPosition() {

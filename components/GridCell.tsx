@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 
 export default function GridCell({
   isEditing,
-  data,
+  data = [],
   setData,
   index,
   onUndoMerge,
@@ -18,7 +18,7 @@ export default function GridCell({
   useEffect(() => {
     const datum = data.find(datum => datum.indices[0] == index);
     if (datum) {
-      setText(datum.text);
+      setText(datum.yourCustomComponentText);
     }
   }, []);
 
@@ -27,7 +27,7 @@ export default function GridCell({
     setData(prevData =>
       prevData.map(square => {
         if (square.indices.includes(index)) {
-          return {...square, text: text};
+          return {...square, yourCustomComponentText: text};
         }
         return square;
       }),
@@ -47,24 +47,28 @@ export default function GridCell({
   return (
     <div className="flex grow">
       {isEditing ? (
+        <>
         <div
           onClick={() => {
             removeNote();
             onUndoMerge();
           }}
-          className="bg-red-500">
+          className="bg-red-500 cursor-pointer">
           X
         </div>
+          <MyText text={text}/>
+        </>
       ) : (
-        <></>
-      )}
-      <textarea
-        className="w-full cursor-auto resize-none overflow-y-auto border border-black bg-yellow-300 bg-opacity-80 outline-none"
-        onChange={event => textChanged(event)}
-        disabled={!isEditing}
-        readOnly={!isEditing}
-        value={text}
-      />
+        <MyText text={text}/>
+        )}
     </div>
   );
+}
+
+function MyText({text}){
+  return (
+    <div>
+    {text ? text : "This is a custom grid cell"}
+    </div>
+  )
 }

@@ -1,5 +1,5 @@
 import React, {cloneElement, useEffect, useState} from 'react';
-import usePrevious from 'hooks/usePrevious';
+import usePrevious from '@/hooks/usePrevious';
 import useDraggingPosition from '@/hooks/useDraggingPosition';
 
 type Square = {
@@ -64,6 +64,7 @@ export default function Grid({
     }
   }, [squareIndexesList]);
 
+
   useEffect(() => {
     if (dragStartIndex == null || currentIndex == null) return;
     const square = completeSquare(currentIndex);
@@ -112,11 +113,6 @@ export default function Grid({
       )
     )
       candidateSquareIndices.length = 0;
-    console.log({
-      xLength: xs.length,
-      yLength: ys.length,
-      indices: candidateSquareIndices,
-    });
     return {
       xLength: xs.length,
       yLength: ys.length,
@@ -150,7 +146,7 @@ export default function Grid({
   }
 
   function onDraggingMergedStarted(index, event) {
-    if (event.target.innerHTML == 'X') return;
+    if (event.target.innerHTML == 'X' || isEditing == false) return;
     setIsDraggingMergedOne(true);
     const droppedItem = squareIndexesList.find(
       square => square.indices[0] === index,
@@ -186,7 +182,6 @@ export default function Grid({
       newDraggingMergedItem.indices = draggingMergedItem.indices.map(
         index => index + diff,
       );
-      console.log(newDraggingMergedItem.indices);
 
       if (isNewIndicesValid(newDraggingMergedItem)) {
         setSquareIndexesList(prev => [...prev, newDraggingMergedItem]);
@@ -198,15 +193,6 @@ export default function Grid({
   }
 
   function isNewIndicesValid(newDraggingMergedItem) {
-    console.log(newDraggingMergedItem);
-    console.log(newDraggingMergedItem.indices[0] / LENGTH);
-    console.log(
-      (newDraggingMergedItem.indices[0] + newDraggingMergedItem.xLength) /
-        LENGTH,
-    );
-
-    console.log(LENGTH);
-
     const newY =
       (newDraggingMergedItem.indices[0] + newDraggingMergedItem.xLength) /
       LENGTH;
@@ -234,6 +220,7 @@ export default function Grid({
   function gridDraggingStarted(event) {}
 
   return (
+    
     <div className="w-full h-full">
       <Dragged draggingRect={draggingRect} />
       <div
@@ -292,7 +279,7 @@ export default function Grid({
                         X
                       </div>
                       <div className="absolute top-1/2 left-1/2  text-3xl">
-                        {index}
+                        
                       </div>
                     </div>
                   )}
@@ -319,7 +306,7 @@ export default function Grid({
                     ? 'bg-red-200'
                     : ''
                 }`}>
-                {index}
+                
               </div>
             );
           }
